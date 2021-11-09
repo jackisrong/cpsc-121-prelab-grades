@@ -10,7 +10,7 @@ function submitForm() {
 	// reset global vars
 	preLabGradesMap = new Map();
 
-	// empty error and warning sections
+	// reset warning section
 	document.getElementById('warning').style.display = 'none';
 	document.getElementById('warning-text').innerHTML = '';
 	
@@ -25,17 +25,17 @@ function submitForm() {
 		return;
 	}
 
-	// parse prelab grades file
-	// on callback: map data to students
+	// parse prelab grades file using PapaParse
+	// on callback: filter & map data to ids
 	Papa.parse(prelabFile, {
 		header: true,
 		complete: (results) => {
-			mapPreLabGradeData(results.data);
+			mapPrelabGradeData(results.data);
 		}
 	});
 }
 
-function mapPreLabGradeData(gradesArray) {
+function mapPrelabGradeData(gradesArray) {
 	// populate map with [CSID, prelab grade] pairs if it's graded
 	gradesArray.forEach((row) => {
 		if (row[GRADESCOPE_HEADERS.Status] == 'Graded') {
@@ -47,7 +47,7 @@ function mapPreLabGradeData(gradesArray) {
 
 function outputResult() {
 	// get the CSID list from the text area
-	// filter removes any empty values that might have been added by additional new lines
+	// filter() removes any empty values that might have been added by additional new lines
 	let csidArray = document.getElementById('csid-list').value.split("\n").filter(el => el);
 
 	// get reference of results table
@@ -59,18 +59,22 @@ function outputResult() {
 		document.getElementById('result').deleteRow(-1);
 	}
 
+	// set up inner tables (this is to support selecting/copying a single column of the table)
+	let csidTable = document.createElement('table');
+	let gradeTable = document.createElement('table');
+	let row = table.insertRow(-1);
+	row.insertCell(-1).append(csidTable);
+	row.insertCell(-1).append(gradeTable);
+
 	csidArray.forEach((csid) => {
-		// insert a new row
-		let row = table.insertRow(-1);
+		// insert cells with csid to new row in csidTable
+		csidTable.insertRow(-1).insertCell(-1).innerHTML = csid;
 
-		// insert cells with csid to row
-		row.insertCell(-1).innerHTML = csid;
-
-		// insert cell with grade to row
+		// insert cell with grade to new row in gradeTable
 		if (preLabGradesMap.has(csid)) {
-			row.insertCell(-1).innerHTML = preLabGradesMap.get(csid);
+			gradeTable.insertRow(-1).insertCell(-1).innerHTML = preLabGradesMap.get(csid);
 		} else {
-			row.insertCell(-1).innerHTML = '---';
+			gradeTable.insertRow(-1).insertCell(-1).innerHTML = '---';
 		}
 	});
 }
