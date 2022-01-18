@@ -16,15 +16,15 @@
 	</div>
 	
 	<div id="dataInput">
-		Raw Gradescope <b>pre-lab grade</b> CSV data:<br>
+		Raw <b>Gradescope pre-lab grade CSV</b> data:<br>
 		<small><i>(access by going to the assignment > Review Grades > Download Grades > Download CSV)</i></small><br>
 		<input type="file" id="gradescope-csv" name="gradescope-csv" accept=".csv,.txt">
 			
 		<br><br>
 
-		List of <b>CSIDs</b> to retrieve grades for:<br>
-		<small><i>(one per line, copy directly from marksheet Excel file)</i></small><br>
-		<textarea id="csid-list" name="csid-list" rows="28" cols="8"></textarea>
+		List of <b>CWLs</b> to retrieve grades for:<br>
+		<small><i>(one per line, copy directly from marksheet file)</i></small><br>
+		<textarea id="csid-list" name="id-list" rows="28" cols="8"></textarea>
 
 		<br><br>
 
@@ -35,7 +35,7 @@
 	
 	<table id="result">
 		<tr>
-			<th>CSID</th>
+			<th>CWL</th>
 			<th>Pre-Lab Grade</th>
 		</tr>
 		<tr>

@@ -1,5 +1,5 @@
 const GRADESCOPE_HEADERS = {
-	Csid: 'Name',
+	Id: 'Name',
 	TotalScore: 'Total Score',
 	Status: 'Status'
 }
@@ -36,19 +36,19 @@ function submitForm() {
 }
 
 function mapPrelabGradeData(gradesArray) {
-	// populate map with [CSID, prelab grade] pairs if it's graded
+	// populate map with [ID, prelab grade] pairs if it's graded
 	gradesArray.forEach((row) => {
 		if (row[GRADESCOPE_HEADERS.Status] == 'Graded') {
-			preLabGradesMap.set(row[GRADESCOPE_HEADERS.Csid], row[GRADESCOPE_HEADERS.TotalScore]);
+			preLabGradesMap.set(row[GRADESCOPE_HEADERS.Id], row[GRADESCOPE_HEADERS.TotalScore]);
 		}
 	});
 	outputResult();
 }
 
 function outputResult() {
-	// get the CSID list from the text area
+	// get the ID list from the text area
 	// filter() removes any empty values that might have been added by additional new lines
-	let csidArray = document.getElementById('csid-list').value.split("\n").filter(el => el);
+	let idArray = document.getElementById('id-list').value.split("\n").filter(el => el);
 
 	// get reference of results table
 	let table = document.getElementById('result');
@@ -60,19 +60,19 @@ function outputResult() {
 	}
 
 	// set up inner tables (this is to support selecting/copying a single column of the table)
-	let csidTable = document.createElement('table');
+	let idTable = document.createElement('table');
 	let gradeTable = document.createElement('table');
 	let row = table.insertRow(-1);
-	row.insertCell(-1).append(csidTable);
+	row.insertCell(-1).append(idTable);
 	row.insertCell(-1).append(gradeTable);
 
-	csidArray.forEach((csid) => {
-		// insert cells with csid to new row in csidTable
-		csidTable.insertRow(-1).insertCell(-1).innerHTML = csid;
+	idArray.forEach((id) => {
+		// insert cells with id to new row in idTable
+		idTable.insertRow(-1).insertCell(-1).innerHTML = id;
 
 		// insert cell with grade to new row in gradeTable
-		if (preLabGradesMap.has(csid)) {
-			gradeTable.insertRow(-1).insertCell(-1).innerHTML = preLabGradesMap.get(csid);
+		if (preLabGradesMap.has(id)) {
+			gradeTable.insertRow(-1).insertCell(-1).innerHTML = preLabGradesMap.get(id);
 		} else {
 			gradeTable.insertRow(-1).insertCell(-1).innerHTML = '---';
 		}
